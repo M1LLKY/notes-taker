@@ -3,7 +3,7 @@
 CREATE TABLE IF NOT EXISTS users
 (
     id         SERIAL PRIMARY KEY,
-    username   VARCHAR(30) NOT NULL,
+    username   VARCHAR(30) NOT NULL UNIQUE,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
