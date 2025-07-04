@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS users
 (
     id         SERIAL PRIMARY KEY,
     username   VARCHAR(30) NOT NULL UNIQUE,
+    password_hash VARCHAR NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL
 );
 

@@ -1,42 +1,26 @@
 package config
 
 import (
-	"github.com/ilyakaznacheev/cleanenv"
-	"log"
-	"os"
+	"errors"
+	"github.com/caarlos0/env/v11"
 	"time"
 )
 
 type Config struct {
-	Env         string `yaml:"env" env-default:"development"`
-	StoragePath string `yaml:"storage_path" env-required:"true"`
-	HTTPServer  `yaml:"http_server"`
+	HTTPListenAddr   string        `env:"HTTP_LISTEN_ADDR" envDefault:":8080"`
+	LogLevel         string        `env:"LOG_LEVEL" envDefault:"DEBUG"`
+	PostgresEndpoint string        `env:"POSTGRES_ENDPOINT"`
+	PostgresDatabase string        `env:"POSTGRES_DATABASE"`
+	PostgresUsername string        `env:"POSTGRES_USERNAME"`
+	PostgresPassword string        `env:"POSTGRES_PASSWORD"`
+	JwtTTLDuration   time.Duration `env:"JWT_TTL" envDefault:"15m"`
+	SigningKey       string        `env:"SIGNING_KEY"`
 }
 
-type HTTPServer struct {
-	Address     string        `yaml:"address"`
-	Timeout     time.Duration `yaml:"timeout" env-default:"4s"`
-	IdleTimeout time.Duration `yaml:"idle_timeout" env-default:"30s"`
-	User        string        `yaml:"user" env-required:"true"`
-	Password    string        `yaml:"password" env-required:"true" env:"HTTP_SERVER_PASSWORD"`
-}
-
-func MustLoad() *Config {
-	configPath := os.Getenv("CONFIG_PATH")
-	if configPath == "" {
-		log.Fatal("CONFIG_PATH environment variable is not set")
+func GetConfig() (*Config, error) {
+	cfg := &Config{}
+	if err := env.Parse(cfg); err != nil {
+		return nil, errors.New("failed to parse config")
 	}
-
-	if _, err := os.Stat(configPath); err != nil {
-		log.Fatalf("error opening config file: %s", err)
-	}
-
-	var cfg Config
-
-	err := cleanenv.ReadConfig(configPath, &cfg)
-	if err != nil {
-		log.Fatalf("error reading config file: %s", err)
-	}
-
-	return &cfg
+	return cfg, nil
 }
