@@ -10,25 +10,25 @@ import (
 type Dependencies struct {
 	Config         *config.Config
 	UserRepository repository.UserRepository
-	//TaskRepository repository.TaskRepository
-	UserService service.UserService
-	//TaskService    service.TaskService
-	TokenManager auth.TokenManager
+	NoteRepository repository.NoteRepository
+	UserService    service.UserService
+	NoteService    service.NoteService
+	TokenManager   auth.TokenManager
 }
 
 func New(
 	config *config.Config,
 	userRepository repository.UserRepository,
-	//taskRepository repository.TaskRepository,
+	noteRepository repository.NoteRepository,
 	userService service.UserService,
-	//taskService service.TaskService,
+	noteService service.NoteService,
 	manager auth.TokenManager) *Dependencies {
 	return &Dependencies{
 		Config:         config,
 		UserRepository: userRepository,
-		//TaskRepository: taskRepository,
-		UserService: userService,
-		//TaskService:    taskService,
-		TokenManager: manager,
+		NoteRepository: noteRepository,
+		UserService:    userService,
+		NoteService:    noteService,
+		TokenManager:   manager,
 	}
 }

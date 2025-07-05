@@ -5,6 +5,7 @@ import (
 	"github.com/jackc/pgx/v5"
 	"notes-taker/internal/models"
 	"notes-taker/internal/repository"
+	"time"
 )
 
 type UserRepository struct {
@@ -32,7 +33,7 @@ func scanUserRow(row pgx.Row) (*models.UserDB, error) {
 
 func (r *UserRepository) GetUserByUsername(ctx context.Context, username string) (*models.UserDB, error) {
 	query := `
-		SELECT id, uername, password_hash FROM users
+		SELECT id, username, password_hash, created_at FROM users
 		WHERE username = $1;
 	`
 	row := r.pool.QueryRow(ctx, query, username)
@@ -45,11 +46,11 @@ func (r *UserRepository) GetUserByUsername(ctx context.Context, username string)
 
 func (r *UserRepository) CreateUser(ctx context.Context, username, passwordHash string) (int, error) {
 	query := `
-		INSERT INTO users(username, password_hash) values ($1, $2)
+		INSERT INTO users(username, password_hash, created_at) values ($1, $2, $3)
 		RETURNING id;
 	`
 	var userID int
-	err := r.pool.QueryRow(ctx, query, username, passwordHash).Scan(&userID)
+	err := r.pool.QueryRow(ctx, query, username, passwordHash, time.Now()).Scan(&userID)
 	if err != nil {
 		return 0, ErrCreateUser
 	}
