@@ -7,9 +7,9 @@ import (
 )
 
 func SendErrorJSON(w http.ResponseWriter, r *http.Request, httpCode int, err error) {
-	erroeResponse := models.BaseResponse{
+	errorResponse := models.BaseResponse{
 		Error: &models.BaseError{Message: err.Error()},
 	}
 	render.Status(r, httpCode)
-	render.JSON(w, r, erroeResponse)
+	render.JSON(w, r, errorResponse)
 }
