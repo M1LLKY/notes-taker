@@ -34,11 +34,15 @@ func New(cfg *config.Config) (*App, error) {
 		return nil, err
 	}
 	userRepository := postgres.NewUserRepository(connector)
+	noteRepository := postgres.NewNoteRepository(connector)
 	userService := service.NewUserService(userRepository, tokenManager, cfg)
+	noteService := service.NewNoteService(noteRepository)
 	deps := dependencies.New(
 		cfg,
 		userRepository,
+		noteRepository,
 		userService,
+		noteService,
 		tokenManager,
 	)
 	srv, err := server.New(deps)

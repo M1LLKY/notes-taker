@@ -26,3 +26,22 @@ type AuthData struct {
 	Username    string `json:"username"`
 	AccessToken string `json:"access_token"`
 }
+
+type CreateNoteResponse struct {
+	BaseResponse
+	Data *CreateNoteData `json:"data,omitempty"`
+}
+
+type CreateNoteData struct {
+	NoteID int `json:"note_id"`
+}
+
+type NoteListResponse struct {
+	BaseResponse
+	Data *[]NoteDTO `data:"error,omitempty"`
+}
+
+type NoteResponse struct {
+	BaseResponse
+	Data *NoteDTO `data:"error,omitempty"`
+}

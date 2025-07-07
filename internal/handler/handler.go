@@ -28,11 +28,11 @@ func (h *Handler) GetRouter() chi.Router {
 	})
 
 	r.With(h.jwtAuthMiddleware).Group(func(r chi.Router) {
-		r.Post("/users/{id}/notes", h.PostCreateNote)
-		r.Get("/users/{id}/notes", h.GetNote)
-		r.Get("/users/{id}/notes/{note_id}", h.GetNoteByID)
-		r.Put("/users/{id}/notes/{note_id}", h.PutNoteByID) // Изменение заметки
-		r.Delete("/users/{id}/notes/{note_id}", h.DeleteNoteByID)
+		r.Post("/users/notes", h.PostCreateNote)
+		r.Get("/users/notes", h.GetAllNotes)
+		r.Get("/users/notes/{note_id}", h.GetNoteByID)
+		r.Put("/users/notes/{note_id}", h.PutUpdateNoteByID) // Изменение заметки
+		r.Delete("/users/notes/{note_id}", h.DelDeleteNoteByID)
 	})
 
 	return r
